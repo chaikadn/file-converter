@@ -1,6 +1,6 @@
 SIMPLE ASYNCHRONIC FILE CONVERTER
 
-APT:
+API:
 
 POST /upload
 GET /status/{id}

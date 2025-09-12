@@ -1,7 +1,6 @@
 package server
 
 import (
-	"log"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
@@ -11,22 +10,21 @@ type Server struct {
 	server *http.Server
 }
 
-func NewServer(addr string) *Server {
+func NewServer(addr string, handler *Handler) *Server {
 	return &Server{
 		server: &http.Server{
 			Addr:    addr,
-			Handler: registerRoutes(newHandler()),
+			Handler: registerRoutes(handler),
 		},
 	}
 }
 
 func (s *Server) Run() error {
-	log.Printf("Starting server at %s\n", s.server.Addr)
 
 	return s.server.ListenAndServe()
 }
 
-func registerRoutes(h *handler) *chi.Mux {
+func registerRoutes(h *Handler) *chi.Mux {
 	r := chi.NewRouter()
 
 	// common middlewares here
