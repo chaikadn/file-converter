@@ -2,7 +2,9 @@ package config
 
 import (
 	"fmt"
+	"log/slog"
 
+	"github.com/caarlos0/env/v6"
 	"github.com/joho/godotenv"
 )
 
@@ -18,12 +20,19 @@ func NewConfig() *Config {
 func (c *Config) Load() error {
 	// for dev only
 	if err := godotenv.Load(); err != nil {
-		return fmt.Errorf("failed to load .env file: %w", err)
+		return fmt.Errorf("failed to load env: %w", err)
 	}
 
-	// load env
+	if err := c.parseEnv(); err != nil {
+		return fmt.Errorf("failed to parse env: %w", err)
+	}
+	slog.Debug("env parsed")
 
 	// parse flags
 
 	return nil
+}
+
+func (c *Config) parseEnv() error {
+	return env.Parse(c)
 }
